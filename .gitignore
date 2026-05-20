@@ -1,0 +1,26 @@
+# --- Python環境用 ---
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# --- 開発環境・OS用 ---
+.DS_Store
+Thumbs.db
+.vscode/
+.devcontainer
+
+# --- 今回のアプリ専用（機密・ローカルデータ） ---
+.env
+.env.backup
+.env.production
+
+# 監視フォルダ内の「処理中」「履歴」の生データ自体はGitに上げない設定
+data/active/*
+data/history/*
+data/waiting/*
+
+# ※ ただし、空のフォルダ構造だけはGitに保持させるための設定
+!data/active/.gitkeep
+!data/history/.gitkeep
+!data/waiting/.gitkeep

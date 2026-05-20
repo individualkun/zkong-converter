@@ -1,0 +1,124 @@
+{
+  "msb01080": {
+    "type": "fixed",
+    "match_pattern": "RJ0000",
+    "min_length": 344,
+    "columns": [
+      {"name": "処理日付", "start": 0, "length": 8, "type": "str", "enabled": true, "alias": "processedDate"},
+      {"name": "POSデータ種別", "start": 8, "length": 1, "type": "str", "enabled": true},
+      {"name": "店舗コード", "start": 9, "length": 10, "type": "str", "enabled": true, "alias": "storeCode"},
+      {"name": "POS売価強制上書区分", "start": 19, "length": 1, "type": "str", "enabled": true},
+      {"name": "本部コード", "start": 20, "length": 10, "type": "str", "enabled": true, "alias": "hqCode"},
+      {"name": "商品コード", "start": 30, "length": 14, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "商品区分", "start": 44, "length": 2, "type": "str", "enabled": true},
+      {"name": "部門階層コード5", "start": 46, "length": 4, "type": "str", "enabled": true},
+      {"name": "部門階層コード6", "start": 50, "length": 4, "type": "str", "enabled": true},
+      {"name": "クラスコード", "start": 54, "length": 6, "type": "str", "enabled": true, "alias": "classCode"},
+      {"name": "自社商品コード", "start": 60, "length": 14, "type": "str", "enabled": true, "alias": "internalItemCode"},
+      {"name": "レシート商品名称_漢字", "start": 74, "length": 28, "type": "str", "enabled": true, "alias": "itemNameKanji"},
+      {"name": "レシート商品名称_カナ", "start": 102, "length": 14, "type": "str", "enabled": true, "alias": "itemNameKana"},
+      {"name": "メーカー名称", "start": 116, "length": 20, "type": "str", "enabled": true, "alias": "makerName"},
+      {"name": "メーカーコード", "start": 136, "length": 9, "type": "str", "enabled": true, "alias": "makerCode"},
+      {"name": "標準価格", "start": 145, "length": 8, "type": "int", "enabled": true, "alias": "standardPrice"},
+      {"name": "売単価", "start": 153, "length": 8, "type": "int", "enabled": true, "alias": "sellingPrice"},
+      {"name": "POS売単価", "start": 161, "length": 8, "type": "int", "enabled": true, "alias": "posSellingPrice"},
+      {"name": "原単価", "start": 169, "length": 8, "type": "int", "enabled": true, "alias": "costPrice"},
+      {"name": "消費税区分_POS", "start": 179, "length": 1, "type": "str", "enabled": true, "alias": "taxDivision"},
+      {"name": "POS変更日", "start": 180, "length": 8, "type": "str", "enabled": true},
+      {"name": "仕入先コード", "start": 188, "length": 8, "type": "str", "enabled": true, "alias": "supplierCode"},
+      {"name": "データ集計区分", "start": 196, "length": 1, "type": "str", "enabled": true},
+      {"name": "ファイル作成済区分", "start": 197, "length": 1, "type": "str", "enabled": true},
+      {"name": "容量", "start": 198, "length": 8, "type": "str", "enabled": true, "alias": "capacity"},
+      {"name": "発注単位", "start": 206, "length": 6, "type": "int", "enabled": true},
+      {"name": "本部管理売価", "start": 212, "length": 8, "type": "int", "enabled": true, "alias": "hqPrice"},
+      {"name": "ユニット単位", "start": 220, "length": 3, "type": "str", "enabled": true},
+      {"name": "ユニット容量", "start": 223, "length": 8, "type": "str", "enabled": true},
+      {"name": "ゴンドラ", "start": 231, "length": 4, "type": "str", "enabled": true, "alias": "gondola"},
+      {"name": "棚段", "start": 235, "length": 3, "type": "str", "enabled": true, "alias": "shelfTier"},
+      {"name": "配列", "start": 238, "length": 2, "type": "str", "enabled": true},
+      {"name": "棚札サイズ区分", "start": 240, "length": 1, "type": "str", "enabled": true},
+      {"name": "月間特売識別", "start": 241, "length": 4, "type": "str", "enabled": true},
+      {"name": "商品名称_漢字_25文字", "start": 246, "length": 50, "type": "str", "enabled": true},
+      {"name": "登録日時", "start": 296, "length": 14, "type": "str", "enabled": true},
+      {"name": "登録担当者コード", "start": 310, "length": 10, "type": "str", "enabled": true},
+      {"name": "変更日時", "start": 320, "length": 14, "type": "str", "enabled": true},
+      {"name": "変更担当者コード", "start": 334, "length": 10, "type": "str", "enabled": true}
+    ]
+  },
+  "toshiba_shohin": {
+    "type": "fixed",
+    "match_pattern": "SHOHIN.TXT",
+    "min_length": 150,
+    "columns": [
+      {"name": "店舗コード", "start": 0, "length": 5, "type": "str", "enabled": true, "alias": "storeCode"},
+      {"name": "部門コード", "start": 5, "length": 5, "type": "str", "enabled": true, "alias": "deptCode"},
+      {"name": "商品コード", "start": 16, "length": 13, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "漢字品名", "start": 29, "length": 50, "type": "str", "enabled": true, "alias": "itemName"},
+      {"name": "漢字規格", "start": 79, "length": 16, "type": "str", "enabled": true, "alias": "itemSpec"},
+      {"name": "本部管理売価", "start": 107, "length": 6, "type": "int", "enabled": true, "alias": "hqPrice"},
+      {"name": "JANコード1", "start": 156, "length": 13, "type": "str", "enabled": true, "alias": "janCode"},
+      {"name": "適応日付", "start": 273, "length": 8, "type": "str", "enabled": true, "alias": "effectiveDate"}
+    ]
+  },
+  "toshiba_uragamen": {
+    "type": "fixed",
+    "match_pattern": "INFODATA01.TXT",
+    "min_length": 60,
+    "columns": [
+      {"name": "業種種別", "start": 0, "length": 2, "type": "str", "enabled": true},
+      {"name": "店舗コード", "start": 2, "length": 5, "type": "str", "enabled": true, "alias": "storeCode"},
+      {"name": "商品コード", "start": 7, "length": 13, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "売上点数", "start": 38, "length": 7, "type": "int", "enabled": true, "alias": "salesQuantity"},
+      {"name": "前週同曜日売上点数", "start": 45, "length": 7, "type": "int", "enabled": true, "alias": "prevWeekSalesQuantity"},
+      {"name": "最終売上時間", "start": 52, "length": 6, "type": "str", "enabled": true, "alias": "lastSalesTime"}
+    ]
+  },
+  "toshiba_esl_v2": {
+    "type": "fixed",
+    "match_pattern": "ESLDATA.TXT",
+    "min_length": 100,
+    "columns": [
+      {"name": "業種種別", "start": 0, "length": 2, "type": "str", "enabled": true},
+      {"name": "JANコード", "start": 11, "length": 13, "type": "str", "enabled": true, "alias": "janCode"},
+      {"name": "商品コード", "start": 35, "length": 13, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "店舗通常売価", "start": 48, "length": 7, "type": "int", "enabled": true, "alias": "normalPrice"},
+      {"name": "現在POS売価", "start": 55, "length": 7, "type": "int", "enabled": true, "alias": "currentPosPrice"},
+      {"name": "状態", "start": 62, "length": 1, "type": "str", "enabled": true, "alias": "status"}
+    ]
+  },
+  "fujitsu_shohin": {
+    "type": "csv",
+    "match_pattern": "SHOHIN.CSV",
+    "columns": [
+      {"name": "商品コード", "index": 0, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "ブランド名", "index": 1, "type": "str", "enabled": true, "alias": "brandName"},
+      {"name": "商品名", "index": 2, "type": "str", "enabled": true, "alias": "itemName"},
+      {"name": "規格", "index": 3, "type": "str", "enabled": true, "alias": "itemSpec"},
+      {"name": "売単価", "index": 4, "type": "int", "enabled": true, "alias": "sellingPrice"},
+      {"name": "部門コード", "index": 14, "type": "str", "enabled": true, "alias": "deptCode"},
+      {"name": "本体価格", "index": 17, "type": "int", "enabled": true, "alias": "basePrice"}
+    ]
+  },
+  "fujitsu_store": {
+    "type": "csv",
+    "match_pattern": "STORE.CSV",
+    "columns": [
+      {"name": "店コード", "index": 0, "type": "str", "enabled": true, "alias": "storeCode"},
+      {"name": "商品コード", "index": 1, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "売単価", "index": 2, "type": "int", "enabled": true, "alias": "sellingPrice"},
+      {"name": "本体価格", "index": 5, "type": "int", "enabled": true, "alias": "basePrice"}
+    ]
+  },
+  "fujitsu_sales": {
+    "type": "csv",
+    "match_pattern": "SALES.CSV",
+    "columns": [
+      {"name": "店コード", "index": 0, "type": "str", "enabled": true, "alias": "storeCode"},
+      {"name": "企画名", "index": 3, "type": "str", "enabled": true, "alias": "campaignName"},
+      {"name": "開始日", "index": 4, "type": "str", "enabled": true, "alias": "startDate"},
+      {"name": "終了日", "index": 5, "type": "str", "enabled": true, "alias": "endDate"},
+      {"name": "商品コード", "index": 8, "type": "str", "enabled": true, "alias": "itemCode"},
+      {"name": "特売売単価", "index": 9, "type": "int", "enabled": true, "alias": "specialPrice"}
+    ]
+  }
+}
