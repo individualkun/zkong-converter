@@ -16,11 +16,15 @@ Thumbs.db
 .env.production
 
 # 監視フォルダ内の「処理中」「履歴」の生データ自体はGitに上げない設定
-data/active/*
-data/history/*
-data/waiting/*
+zkong-app/data/active/*
+zkong-app/data/done/*
+zkong-app/data/error/*
+zkong-app/data/history/*
+zkong-app/data/waiting/*
 
 # ※ ただし、空のフォルダ構造だけはGitに保持させるための設定
-!data/active/.gitkeep
-!data/history/.gitkeep
-!data/waiting/.gitkeep
+!zkong-app/data/active/.gitkeep
+!zkong-app/data/done/.gitkeep
+!zkong-app/data/error/.gitkeep
+!zkong-app/data/history/.gitkeep
+!zkong-app/data/waiting/.gitkeep

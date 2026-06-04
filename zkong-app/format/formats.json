@@ -1,124 +1,941 @@
 {
-  "msb01080": {
-    "type": "fixed",
-    "match_pattern": "RJ0000",
-    "min_length": 344,
-    "columns": [
-      {"name": "処理日付", "start": 0, "length": 8, "type": "str", "enabled": true, "alias": "processedDate"},
-      {"name": "POSデータ種別", "start": 8, "length": 1, "type": "str", "enabled": true},
-      {"name": "店舗コード", "start": 9, "length": 10, "type": "str", "enabled": true, "alias": "storeCode"},
-      {"name": "POS売価強制上書区分", "start": 19, "length": 1, "type": "str", "enabled": true},
-      {"name": "本部コード", "start": 20, "length": 10, "type": "str", "enabled": true, "alias": "hqCode"},
-      {"name": "商品コード", "start": 30, "length": 14, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "商品区分", "start": 44, "length": 2, "type": "str", "enabled": true},
-      {"name": "部門階層コード5", "start": 46, "length": 4, "type": "str", "enabled": true},
-      {"name": "部門階層コード6", "start": 50, "length": 4, "type": "str", "enabled": true},
-      {"name": "クラスコード", "start": 54, "length": 6, "type": "str", "enabled": true, "alias": "classCode"},
-      {"name": "自社商品コード", "start": 60, "length": 14, "type": "str", "enabled": true, "alias": "internalItemCode"},
-      {"name": "レシート商品名称_漢字", "start": 74, "length": 28, "type": "str", "enabled": true, "alias": "itemNameKanji"},
-      {"name": "レシート商品名称_カナ", "start": 102, "length": 14, "type": "str", "enabled": true, "alias": "itemNameKana"},
-      {"name": "メーカー名称", "start": 116, "length": 20, "type": "str", "enabled": true, "alias": "makerName"},
-      {"name": "メーカーコード", "start": 136, "length": 9, "type": "str", "enabled": true, "alias": "makerCode"},
-      {"name": "標準価格", "start": 145, "length": 8, "type": "int", "enabled": true, "alias": "standardPrice"},
-      {"name": "売単価", "start": 153, "length": 8, "type": "int", "enabled": true, "alias": "sellingPrice"},
-      {"name": "POS売単価", "start": 161, "length": 8, "type": "int", "enabled": true, "alias": "posSellingPrice"},
-      {"name": "原単価", "start": 169, "length": 8, "type": "int", "enabled": true, "alias": "costPrice"},
-      {"name": "消費税区分_POS", "start": 179, "length": 1, "type": "str", "enabled": true, "alias": "taxDivision"},
-      {"name": "POS変更日", "start": 180, "length": 8, "type": "str", "enabled": true},
-      {"name": "仕入先コード", "start": 188, "length": 8, "type": "str", "enabled": true, "alias": "supplierCode"},
-      {"name": "データ集計区分", "start": 196, "length": 1, "type": "str", "enabled": true},
-      {"name": "ファイル作成済区分", "start": 197, "length": 1, "type": "str", "enabled": true},
-      {"name": "容量", "start": 198, "length": 8, "type": "str", "enabled": true, "alias": "capacity"},
-      {"name": "発注単位", "start": 206, "length": 6, "type": "int", "enabled": true},
-      {"name": "本部管理売価", "start": 212, "length": 8, "type": "int", "enabled": true, "alias": "hqPrice"},
-      {"name": "ユニット単位", "start": 220, "length": 3, "type": "str", "enabled": true},
-      {"name": "ユニット容量", "start": 223, "length": 8, "type": "str", "enabled": true},
-      {"name": "ゴンドラ", "start": 231, "length": 4, "type": "str", "enabled": true, "alias": "gondola"},
-      {"name": "棚段", "start": 235, "length": 3, "type": "str", "enabled": true, "alias": "shelfTier"},
-      {"name": "配列", "start": 238, "length": 2, "type": "str", "enabled": true},
-      {"name": "棚札サイズ区分", "start": 240, "length": 1, "type": "str", "enabled": true},
-      {"name": "月間特売識別", "start": 241, "length": 4, "type": "str", "enabled": true},
-      {"name": "商品名称_漢字_25文字", "start": 246, "length": 50, "type": "str", "enabled": true},
-      {"name": "登録日時", "start": 296, "length": 14, "type": "str", "enabled": true},
-      {"name": "登録担当者コード", "start": 310, "length": 10, "type": "str", "enabled": true},
-      {"name": "変更日時", "start": 320, "length": 14, "type": "str", "enabled": true},
-      {"name": "変更担当者コード", "start": 334, "length": 10, "type": "str", "enabled": true}
-    ]
-  },
-  "toshiba_shohin": {
-    "type": "fixed",
-    "match_pattern": "SHOHIN.TXT",
-    "min_length": 150,
-    "columns": [
-      {"name": "店舗コード", "start": 0, "length": 5, "type": "str", "enabled": true, "alias": "storeCode"},
-      {"name": "部門コード", "start": 5, "length": 5, "type": "str", "enabled": true, "alias": "deptCode"},
-      {"name": "商品コード", "start": 16, "length": 13, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "漢字品名", "start": 29, "length": 50, "type": "str", "enabled": true, "alias": "itemName"},
-      {"name": "漢字規格", "start": 79, "length": 16, "type": "str", "enabled": true, "alias": "itemSpec"},
-      {"name": "本部管理売価", "start": 107, "length": 6, "type": "int", "enabled": true, "alias": "hqPrice"},
-      {"name": "JANコード1", "start": 156, "length": 13, "type": "str", "enabled": true, "alias": "janCode"},
-      {"name": "適応日付", "start": 273, "length": 8, "type": "str", "enabled": true, "alias": "effectiveDate"}
-    ]
-  },
-  "toshiba_uragamen": {
-    "type": "fixed",
-    "match_pattern": "INFODATA01.TXT",
-    "min_length": 60,
-    "columns": [
-      {"name": "業種種別", "start": 0, "length": 2, "type": "str", "enabled": true},
-      {"name": "店舗コード", "start": 2, "length": 5, "type": "str", "enabled": true, "alias": "storeCode"},
-      {"name": "商品コード", "start": 7, "length": 13, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "売上点数", "start": 38, "length": 7, "type": "int", "enabled": true, "alias": "salesQuantity"},
-      {"name": "前週同曜日売上点数", "start": 45, "length": 7, "type": "int", "enabled": true, "alias": "prevWeekSalesQuantity"},
-      {"name": "最終売上時間", "start": 52, "length": 6, "type": "str", "enabled": true, "alias": "lastSalesTime"}
-    ]
-  },
-  "toshiba_esl_v2": {
-    "type": "fixed",
-    "match_pattern": "ESLDATA.TXT",
-    "min_length": 100,
-    "columns": [
-      {"name": "業種種別", "start": 0, "length": 2, "type": "str", "enabled": true},
-      {"name": "JANコード", "start": 11, "length": 13, "type": "str", "enabled": true, "alias": "janCode"},
-      {"name": "商品コード", "start": 35, "length": 13, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "店舗通常売価", "start": 48, "length": 7, "type": "int", "enabled": true, "alias": "normalPrice"},
-      {"name": "現在POS売価", "start": 55, "length": 7, "type": "int", "enabled": true, "alias": "currentPosPrice"},
-      {"name": "状態", "start": 62, "length": 1, "type": "str", "enabled": true, "alias": "status"}
-    ]
-  },
-  "fujitsu_shohin": {
-    "type": "csv",
-    "match_pattern": "SHOHIN.CSV",
-    "columns": [
-      {"name": "商品コード", "index": 0, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "ブランド名", "index": 1, "type": "str", "enabled": true, "alias": "brandName"},
-      {"name": "商品名", "index": 2, "type": "str", "enabled": true, "alias": "itemName"},
-      {"name": "規格", "index": 3, "type": "str", "enabled": true, "alias": "itemSpec"},
-      {"name": "売単価", "index": 4, "type": "int", "enabled": true, "alias": "sellingPrice"},
-      {"name": "部門コード", "index": 14, "type": "str", "enabled": true, "alias": "deptCode"},
-      {"name": "本体価格", "index": 17, "type": "int", "enabled": true, "alias": "basePrice"}
-    ]
-  },
-  "fujitsu_store": {
-    "type": "csv",
-    "match_pattern": "STORE.CSV",
-    "columns": [
-      {"name": "店コード", "index": 0, "type": "str", "enabled": true, "alias": "storeCode"},
-      {"name": "商品コード", "index": 1, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "売単価", "index": 2, "type": "int", "enabled": true, "alias": "sellingPrice"},
-      {"name": "本体価格", "index": 5, "type": "int", "enabled": true, "alias": "basePrice"}
-    ]
-  },
-  "fujitsu_sales": {
-    "type": "csv",
-    "match_pattern": "SALES.CSV",
-    "columns": [
-      {"name": "店コード", "index": 0, "type": "str", "enabled": true, "alias": "storeCode"},
-      {"name": "企画名", "index": 3, "type": "str", "enabled": true, "alias": "campaignName"},
-      {"name": "開始日", "index": 4, "type": "str", "enabled": true, "alias": "startDate"},
-      {"name": "終了日", "index": 5, "type": "str", "enabled": true, "alias": "endDate"},
-      {"name": "商品コード", "index": 8, "type": "str", "enabled": true, "alias": "itemCode"},
-      {"name": "特売売単価", "index": 9, "type": "int", "enabled": true, "alias": "specialPrice"}
-    ]
-  }
+  "version": 2,
+  "description": "企画特売サンプルCSVに合わせたヘッダーなしCSVレイアウト定義",
+  "layouts": [
+    {
+      "id": "plan_bargain_master",
+      "name": "企画特売マスタ",
+      "type": "csv",
+      "has_header": false,
+      "encodings": [
+        "utf-8-sig",
+        "cp932"
+      ],
+      "detection": {
+        "file_name_contains": [
+          "PlanBargainMaster"
+        ]
+      },
+      "api": {
+        "path": "plan-bargains"
+      },
+      "fields": [
+        {
+          "index": 0,
+          "name": "planCode",
+          "label": "企画特売コード",
+          "target": "planCode",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 1,
+          "name": "planName",
+          "label": "企画特売名称",
+          "target": "planName",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 2,
+          "name": "saleStartDate",
+          "label": "販売開始日",
+          "target": "saleStartDate",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 3,
+          "name": "saleStartTime",
+          "label": "販売開始時刻",
+          "target": "saleStartTime",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 4,
+          "name": "saleEndDate",
+          "label": "販売終了日",
+          "target": "saleEndDate",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 5,
+          "name": "saleEndTime",
+          "label": "販売終了時刻",
+          "target": "saleEndTime",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 6,
+          "name": "storeOrderStartDate",
+          "label": "店舗発注開始日",
+          "target": "storeOrderStartDate",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 7,
+          "name": "storeOrderEndDate",
+          "label": "店舗発注終了日",
+          "target": "storeOrderEndDate",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 8,
+          "name": "headOfficeOrderDeadline",
+          "label": "本部発注期限",
+          "target": "headOfficeOrderDeadline",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 9,
+          "name": "createdAt",
+          "label": "登録日時",
+          "target": "createdAt",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 10,
+          "name": "createdBy",
+          "label": "登録担当者コード",
+          "target": "createdBy",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 11,
+          "name": "updatedAt",
+          "label": "変更日時",
+          "target": "updatedAt",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 12,
+          "name": "updatedBy",
+          "label": "変更担当者コード",
+          "target": "updatedBy",
+          "type": "str",
+          "required": false,
+          "send": true
+        }
+      ]
+    },
+    {
+      "id": "plan_bargain_sub_master",
+      "name": "企画特売サブマスタ",
+      "type": "csv",
+      "has_header": false,
+      "encodings": [
+        "utf-8-sig",
+        "cp932"
+      ],
+      "detection": {
+        "file_name_contains": [
+          "PlanBargainSubMaster"
+        ]
+      },
+      "api": {
+        "path": "plan-bargain-subs"
+      },
+      "fields": [
+        {
+          "index": 0,
+          "name": "planCode",
+          "label": "企画特売コード",
+          "target": "planCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 1,
+          "name": "subCode",
+          "label": "企画特売サブコード",
+          "target": "subCode",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 2,
+          "name": "subName",
+          "label": "企画特売サブ名称",
+          "target": "subName",
+          "type": "str",
+          "required": true,
+          "send": true
+        },
+        {
+          "index": 3,
+          "name": "saleStartDate",
+          "label": "販売開始日",
+          "target": "saleStartDate",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 4,
+          "name": "saleStartTime",
+          "label": "販売開始時刻",
+          "target": "saleStartTime",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 5,
+          "name": "saleEndDate",
+          "label": "販売終了日",
+          "target": "saleEndDate",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 6,
+          "name": "saleEndTime",
+          "label": "販売終了時刻",
+          "target": "saleEndTime",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 7,
+          "name": "storeOrderStartDate",
+          "label": "店舗発注開始日",
+          "target": "storeOrderStartDate",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 8,
+          "name": "storeOrderEndDate",
+          "label": "店舗発注終了日",
+          "target": "storeOrderEndDate",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 9,
+          "name": "headOfficeOrderDeadline",
+          "label": "本部発注期限",
+          "target": "headOfficeOrderDeadline",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 10,
+          "name": "firstDeliveryDate",
+          "label": "初回納品日",
+          "target": "firstDeliveryDate",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 11,
+          "name": "posPlanCode",
+          "label": "企画特売コード（POS）",
+          "target": "posPlanCode",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 12,
+          "name": "allocationType",
+          "label": "割当区分",
+          "target": "allocationType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 13,
+          "name": "saleStartSendType",
+          "label": "販売開始送信区分",
+          "target": "saleStartSendType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 14,
+          "name": "eosOrderType",
+          "label": "EOS発注区分",
+          "target": "eosOrderType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 15,
+          "name": "posSendType",
+          "label": "POS送信区分",
+          "target": "posSendType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 16,
+          "name": "createdAt",
+          "label": "登録日時",
+          "target": "createdAt",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 17,
+          "name": "createdBy",
+          "label": "登録担当者コード",
+          "target": "createdBy",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 18,
+          "name": "updatedAt",
+          "label": "変更日時",
+          "target": "updatedAt",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 19,
+          "name": "updatedBy",
+          "label": "変更担当者コード",
+          "target": "updatedBy",
+          "type": "str",
+          "required": false,
+          "send": false
+        }
+      ]
+    },
+    {
+      "id": "plan_bargain_head_office_goods_master",
+      "name": "企画特売本部商品マスタ",
+      "type": "csv",
+      "has_header": false,
+      "encodings": [
+        "utf-8-sig",
+        "cp932"
+      ],
+      "detection": {
+        "file_name_contains": [
+          "PlanBargainHeadOfficeGoodsMaster"
+        ]
+      },
+      "api": {
+        "path": "plan-bargain-head-office-goods"
+      },
+      "fields": [
+        {
+          "index": 0,
+          "name": "planCode",
+          "label": "企画特売コード",
+          "target": "planCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 1,
+          "name": "subCode",
+          "label": "企画特売サブコード",
+          "target": "subCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 2,
+          "name": "itemCode",
+          "label": "商品コード",
+          "target": "itemCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 3,
+          "name": "seq",
+          "label": "SEQ",
+          "target": "seq",
+          "type": "int",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 4,
+          "name": "posTaxType",
+          "label": "消費税区分（POS）",
+          "target": "posTaxType",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 5,
+          "name": "taxRate",
+          "label": "消費税率",
+          "target": "taxRate",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 6,
+          "name": "supplierCode",
+          "label": "仕入先コード",
+          "target": "supplierCode",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 7,
+          "name": "supplierTaxType",
+          "label": "消費税区分（仕入先）",
+          "target": "supplierTaxType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 8,
+          "name": "taxDecimalDigits",
+          "label": "消費税小数点有効桁数",
+          "target": "taxDecimalDigits",
+          "type": "int",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 9,
+          "name": "costIncludingTax",
+          "label": "原単価（税込）",
+          "target": "costIncludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 10,
+          "name": "priceIncludingTax",
+          "label": "売単価（税込）",
+          "target": "priceIncludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 11,
+          "name": "costExcludingTax",
+          "label": "原単価（税抜）",
+          "target": "costExcludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 12,
+          "name": "priceExcludingTax",
+          "label": "売単価（税抜）",
+          "target": "priceExcludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 13,
+          "name": "taxAmount",
+          "label": "消費税",
+          "target": "taxAmount",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 14,
+          "name": "orderUnitType",
+          "label": "発注単位区分",
+          "target": "orderUnitType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 15,
+          "name": "orderUnitQuantity",
+          "label": "発注単位数量",
+          "target": "orderUnitQuantity",
+          "type": "float",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 16,
+          "name": "bargainType",
+          "label": "企画特売区分",
+          "target": "bargainType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 17,
+          "name": "targetForecastPi",
+          "label": "目標見込PI",
+          "target": "targetForecastPi",
+          "type": "int",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 18,
+          "name": "comment",
+          "label": "コメント",
+          "target": "comment",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 19,
+          "name": "deliveryType1",
+          "label": "便区分1",
+          "target": "deliveryType1",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 20,
+          "name": "deliveryType2",
+          "label": "便区分2",
+          "target": "deliveryType2",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 21,
+          "name": "deliveryType3",
+          "label": "便区分3",
+          "target": "deliveryType3",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 22,
+          "name": "firstDeliveryDate",
+          "label": "初回納品日",
+          "target": "firstDeliveryDate",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 23,
+          "name": "saleStartSendType",
+          "label": "販売開始送信区分",
+          "target": "saleStartSendType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 24,
+          "name": "eosOrderType",
+          "label": "EOS発注区分",
+          "target": "eosOrderType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 25,
+          "name": "posSendType",
+          "label": "POS送信区分",
+          "target": "posSendType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 26,
+          "name": "createdAt",
+          "label": "登録日時",
+          "target": "createdAt",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 27,
+          "name": "createdBy",
+          "label": "登録担当者コード",
+          "target": "createdBy",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 28,
+          "name": "updatedAt",
+          "label": "変更日時",
+          "target": "updatedAt",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 29,
+          "name": "updatedBy",
+          "label": "変更担当者コード",
+          "target": "updatedBy",
+          "type": "str",
+          "required": false,
+          "send": false
+        }
+      ]
+    },
+    {
+      "id": "plan_bargain_store_goods_master",
+      "name": "企画特売店舗商品マスタ",
+      "type": "csv",
+      "has_header": false,
+      "encodings": [
+        "utf-8-sig",
+        "cp932"
+      ],
+      "detection": {
+        "file_name_contains": [
+          "PlanBargainStoreGoodsMaster"
+        ]
+      },
+      "api": {
+        "path": "plan-bargain-store-goods"
+      },
+      "fields": [
+        {
+          "index": 0,
+          "name": "planCode",
+          "label": "企画特売コード",
+          "target": "planCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 1,
+          "name": "subCode",
+          "label": "企画特売サブコード",
+          "target": "subCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 2,
+          "name": "storeCode",
+          "label": "店舗コード",
+          "target": "storeCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 3,
+          "name": "itemCode",
+          "label": "商品コード",
+          "target": "itemCode",
+          "type": "str",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 4,
+          "name": "seq",
+          "label": "SEQ",
+          "target": "seq",
+          "type": "int",
+          "required": true,
+          "send": false
+        },
+        {
+          "index": 5,
+          "name": "posTaxType",
+          "label": "消費税区分（POS）",
+          "target": "posTaxType",
+          "type": "str",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 6,
+          "name": "taxRate",
+          "label": "消費税率",
+          "target": "taxRate",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 7,
+          "name": "supplierCode",
+          "label": "仕入先コード",
+          "target": "supplierCode",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 8,
+          "name": "supplierTaxType",
+          "label": "消費税区分（仕入先）",
+          "target": "supplierTaxType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 9,
+          "name": "taxDecimalDigits",
+          "label": "消費税小数点有効桁数",
+          "target": "taxDecimalDigits",
+          "type": "int",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 10,
+          "name": "costIncludingTax",
+          "label": "原単価（税込）",
+          "target": "costIncludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 11,
+          "name": "priceIncludingTax",
+          "label": "売単価（税込）",
+          "target": "priceIncludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 12,
+          "name": "costExcludingTax",
+          "label": "原単価（税抜）",
+          "target": "costExcludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 13,
+          "name": "priceExcludingTax",
+          "label": "売単価（税抜）",
+          "target": "priceExcludingTax",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 14,
+          "name": "taxAmount",
+          "label": "消費税",
+          "target": "taxAmount",
+          "type": "float",
+          "required": false,
+          "send": true
+        },
+        {
+          "index": 15,
+          "name": "orderUnitType",
+          "label": "発注単位区分",
+          "target": "orderUnitType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 16,
+          "name": "orderUnitQuantity",
+          "label": "発注単位数量",
+          "target": "orderUnitQuantity",
+          "type": "float",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 17,
+          "name": "bargainType",
+          "label": "企画特売区分",
+          "target": "bargainType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 18,
+          "name": "targetForecastPi",
+          "label": "目標見込PI",
+          "target": "targetForecastPi",
+          "type": "int",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 19,
+          "name": "comment",
+          "label": "コメント",
+          "target": "comment",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 20,
+          "name": "deliveryType1",
+          "label": "便区分1",
+          "target": "deliveryType1",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 21,
+          "name": "deliveryType2",
+          "label": "便区分2",
+          "target": "deliveryType2",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 22,
+          "name": "deliveryType3",
+          "label": "便区分3",
+          "target": "deliveryType3",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 23,
+          "name": "firstDeliveryDate",
+          "label": "初回納品日",
+          "target": "firstDeliveryDate",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 24,
+          "name": "forceOverwritePosPriceType",
+          "label": "POS売価強制上書区分",
+          "target": "forceOverwritePosPriceType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 25,
+          "name": "saleStartSendType",
+          "label": "販売開始送信区分",
+          "target": "saleStartSendType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 26,
+          "name": "eosOrderType",
+          "label": "EOS発注区分",
+          "target": "eosOrderType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 27,
+          "name": "posSendType",
+          "label": "POS送信区分",
+          "target": "posSendType",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 28,
+          "name": "createdAt",
+          "label": "登録日時",
+          "target": "createdAt",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 29,
+          "name": "createdBy",
+          "label": "登録担当者コード",
+          "target": "createdBy",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 30,
+          "name": "updatedAt",
+          "label": "変更日時",
+          "target": "updatedAt",
+          "type": "str",
+          "required": false,
+          "send": false
+        },
+        {
+          "index": 31,
+          "name": "updatedBy",
+          "label": "変更担当者コード",
+          "target": "updatedBy",
+          "type": "str",
+          "required": false,
+          "send": false
+        }
+      ]
+    }
+  ]
 }
