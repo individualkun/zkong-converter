@@ -4,6 +4,7 @@ import argparse
 import csv
 import json
 import os
+import secrets
 import shutil
 import time
 import urllib.error
@@ -22,6 +23,36 @@ except ModuleNotFoundError:
 
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_CONFIG_PATH = BASE_DIR / "format" / "formats.json"
+ZKONG_ITEM_FIELDS = {
+    "barCode",
+    "productCode",
+    "attrCategory",
+    "attrName",
+    "itemTitle",
+    "shortTitle",
+    "unit",
+    "productArea",
+    "qrCode",
+    "nfcUrl",
+    "spec",
+    "originalPrice",
+    "price",
+    "memberPrice",
+    "stock1",
+    "stock2",
+    "stock3",
+    "proStartTime",
+    "proEndTime",
+    "promotionText",
+    "manufacturer",
+    "itemGrade",
+    "weighingType",
+    "releaseStatus",
+    "firstCategory",
+    "secondCategory",
+    "labelNo",
+}
+ZKONG_ITEM_FIELDS.update({f"custFeature{index}" for index in range(1, 51)})
 
 
 def env_path(name: str, default: str) -> Path:
@@ -38,6 +69,11 @@ def env_int(name: str, default: int) -> int:
         return default
 
 
+def is_blank(value: Any) -> bool:
+    """Noneや空文字を、APIへ送らない空値として扱う。"""
+    return value is None or (isinstance(value, str) and not value.strip())
+
+
 @dataclass(frozen=True)
 class AppSettings:
     """アプリ全体で使う設定値をまとめて持つ入れ物。"""
@@ -49,6 +85,15 @@ class AppSettings:
     config_path: Path
     api_endpoint: str
     api_token: str
+    api_provider: str
+    zkong_base_url: str
+    zkong_account: str
+    zkong_password: str
+    zkong_store_id: str
+    zkong_merchant_id: str
+    zkong_agency_id: str
+    zkong_attr_category: str
+    zkong_attr_name: str
     dry_run: bool
     save_history_jsonl: bool
     file_stable_seconds: float
@@ -72,6 +117,15 @@ class AppSettings:
             config_path=env_path("FORMAT_CONFIG", str(DEFAULT_CONFIG_PATH)),
             api_endpoint=os.getenv("API_ENDPOINT", "").strip(),
             api_token=os.getenv("API_TOKEN", "").strip(),
+            api_provider=os.getenv("API_PROVIDER", "generic").strip().lower(),
+            zkong_base_url=os.getenv("ZKONG_BASE_URL", "").strip().rstrip("/"),
+            zkong_account=os.getenv("ZKONG_ACCOUNT", "").strip(),
+            zkong_password=os.getenv("ZKONG_PASSWORD", "").strip(),
+            zkong_store_id=os.getenv("ZKONG_STORE_ID", "").strip(),
+            zkong_merchant_id=os.getenv("ZKONG_MERCHANT_ID", "").strip(),
+            zkong_agency_id=os.getenv("ZKONG_AGENCY_ID", "").strip(),
+            zkong_attr_category=os.getenv("ZKONG_ATTR_CATEGORY", "default").strip() or "default",
+            zkong_attr_name=os.getenv("ZKONG_ATTR_NAME", "default").strip() or "default",
             dry_run=dry_run or os.getenv("DRY_RUN", "false").lower() == "true",
             save_history_jsonl=os.getenv("SAVE_HISTORY_JSONL", "true").lower() == "true",
             file_stable_seconds=float(os.getenv("FILE_STABLE_SECONDS", "1.0")),
@@ -242,6 +296,65 @@ class RowValidator:
 
         return valid_rows, errors
 
+def rsa_encrypt_password(public_key_text: str, password: str) -> str:
+    """ZKONGログイン用に、RSA公開鍵でパスワードを暗号化する。"""
+    import base64
+
+    key_bytes = base64.b64decode(public_key_text)
+    modulus, exponent = parse_subject_public_key_info(key_bytes)
+    key_size = (modulus.bit_length() + 7) // 8
+    message = password.encode("utf-8")
+    if len(message) > key_size - 11:
+        raise ValueError("Password is too long for RSA public key encryption")
+
+    padding_length = key_size - len(message) - 3
+    padding = bytearray()
+    while len(padding) < padding_length:
+        padding.append(secrets.randbelow(255) + 1)
+
+    encoded_message = b"\x00\x02" + bytes(padding) + b"\x00" + message
+    encrypted = pow(int.from_bytes(encoded_message, "big"), exponent, modulus)
+    return base64.b64encode(encrypted.to_bytes(key_size, "big")).decode("ascii")
+
+
+def parse_subject_public_key_info(data: bytes) -> tuple[int, int]:
+    """X.509 SubjectPublicKeyInfo DERからRSA modulus/exponentを取り出す。"""
+    outer_value, _ = read_der_tlv(data, 0, 0x30)
+    _, offset = read_der_tlv(outer_value, 0, 0x30)
+    bit_string, _ = read_der_tlv(outer_value, offset, 0x03)
+    rsa_key = bit_string[1:]
+    rsa_value, _ = read_der_tlv(rsa_key, 0, 0x30)
+    modulus_bytes, offset = read_der_tlv(rsa_value, 0, 0x02)
+    exponent_bytes, _ = read_der_tlv(rsa_value, offset, 0x02)
+    return int.from_bytes(modulus_bytes, "big"), int.from_bytes(exponent_bytes, "big")
+
+
+def read_der_tlv(data: bytes, offset: int, expected_tag: int) -> tuple[bytes, int]:
+    """DERのTag-Length-Valueを1つ読む。"""
+    if offset >= len(data) or data[offset] != expected_tag:
+        raise ValueError("Unexpected DER structure")
+    offset += 1
+    length = data[offset]
+    offset += 1
+    if length & 0x80:
+        length_size = length & 0x7F
+        length = int.from_bytes(data[offset : offset + length_size], "big")
+        offset += length_size
+    value = data[offset : offset + length]
+    return value, offset + length
+
+
+def format_zkong_datetime(date_value: Any, time_value: Any) -> str:
+    """YYYYMMDD と HHMM を ZKONGの yyyy-MM-dd HH:mm:ss へ変換する。"""
+    date_text = str(date_value)
+    time_text = str(time_value).zfill(4)
+    return f"{date_text[0:4]}-{date_text[4:6]}-{date_text[6:8]} {time_text[0:2]}:{time_text[2:4]}:00"
+
+
+def chunked(items: list[dict[str, Any]], size: int) -> list[list[dict[str, Any]]]:
+    """リストを指定件数ごとに分割する。"""
+    return [items[index : index + size] for index in range(0, len(items), size)]
+
 
 class ApiClient:
     """変換済みデータを外部APIへ送信するための薄いクライアント。"""
@@ -249,9 +362,15 @@ class ApiClient:
     def __init__(self, settings: AppSettings):
         """API送信に必要な設定を保持する。"""
         self.settings = settings
+        self._zkong_token: str | None = None
+        self._zkong_login_data: dict[str, Any] | None = None
 
     def send(self, layout: dict[str, Any], rows: list[dict[str, Any]]) -> None:
         """レイアウト定義に沿ってpayloadを作り、1行ずつAPIへPOSTする。"""
+        if self.settings.api_provider == "zkong":
+            self.send_to_zkong(layout, rows)
+            return
+
         payloads = self.build_payloads(layout, rows)
 
         if self.settings.dry_run:
@@ -264,6 +383,144 @@ class ApiClient:
         endpoint = self._resolve_endpoint(layout)
         for payload in payloads:
             self._post_json(endpoint, payload)
+
+    def send_to_zkong(self, layout: dict[str, Any], rows: list[dict[str, Any]]) -> None:
+        """ZKONGの商品一括取込APIへ送信する。"""
+        item_list = self.build_zkong_item_list(layout, rows)
+        if not item_list:
+            print(f"[ZKONG SKIP] {layout['id']}: barCode に使える値が無いため送信対象外です")
+            return
+
+        if self.settings.dry_run:
+            print(f"[DRY-RUN][ZKONG] {layout['id']}: {len(item_list)} items would be sent")
+            return
+
+        token = self.get_zkong_token()
+        agency_id, merchant_id, store_id = self.resolve_zkong_ids()
+        for chunk in chunked(item_list, 20000):
+            body = {
+                "agencyId": agency_id,
+                "merchantId": merchant_id,
+                "storeId": store_id,
+                "unitName": 1,
+                "itemList": chunk,
+            }
+            response = self._request_json(
+                "POST",
+                self._zkong_url("/zk/item/batchImportItem"),
+                body,
+                {"Authorization": token, "Language": "ja"},
+            )
+            if not response.get("success"):
+                raise RuntimeError(f"ZKONG商品取込に失敗しました: {response}")
+
+    def build_zkong_item_list(self, layout: dict[str, Any], rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """formats.jsonのsend/zkongTargetに従ってZKONG itemListを作る。"""
+        item_list: list[dict[str, Any]] = []
+        for row in rows:
+            item = self._build_zkong_item(layout, row)
+            if item:
+                item_list.append(item)
+        return item_list
+
+    def _build_zkong_item(self, layout: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
+        """1行分の内部データをZKONGの商品一括取込API項目へ変換する。"""
+        item: dict[str, Any] = {
+            "attrCategory": self.settings.zkong_attr_category,
+            "attrName": self.settings.zkong_attr_name,
+        }
+
+        for field in layout["fields"]:
+            if not field.get("send", True):
+                continue
+            value = row.get(field["name"])
+            if is_blank(value):
+                continue
+
+            zkong_target = field.get("zkongTarget") or field.get("target")
+            if zkong_target in ZKONG_ITEM_FIELDS:
+                item[zkong_target] = value
+
+        bar_code = item.get("barCode") or row.get("itemCode")
+        if is_blank(bar_code):
+            return {}
+        item["barCode"] = str(bar_code)
+        item.setdefault("productCode", str(bar_code))
+
+        if row.get("saleStartDate") and row.get("saleStartTime") and "proStartTime" not in item:
+            item["proStartTime"] = format_zkong_datetime(row["saleStartDate"], row["saleStartTime"])
+        if row.get("saleEndDate") and row.get("saleEndTime") and "proEndTime" not in item:
+            item["proEndTime"] = format_zkong_datetime(row["saleEndDate"], row["saleEndTime"])
+        if row.get("priceIncludingTax") is not None and "price" not in item:
+            item["price"] = row["priceIncludingTax"]
+        if row.get("costIncludingTax") is not None and "originalPrice" not in item:
+            item["originalPrice"] = row["costIncludingTax"]
+
+        item["attrCategory"] = str(item["attrCategory"])
+        item["attrName"] = str(item["attrName"])
+        return item
+
+    def test_zkong_login(self) -> dict[str, Any]:
+        """ZKONGへログインできるか確認し、ログインレスポンスを返す。"""
+        self.get_zkong_token()
+        return self._zkong_login_data or {}
+
+    def get_zkong_token(self) -> str:
+        """公開鍵取得、パスワード暗号化、ログインを行いTokenを返す。"""
+        if self._zkong_token:
+            return self._zkong_token
+        self.ensure_zkong_settings()
+        public_key_response = self._request_json("GET", self._zkong_url("/zk/user/getErpPublicKey"))
+        if not public_key_response.get("success"):
+            raise RuntimeError(f"ZKONG公開鍵取得に失敗しました: {public_key_response}")
+        encrypted_password = rsa_encrypt_password(public_key_response["data"], self.settings.zkong_password)
+        login_response = self._request_json(
+            "POST",
+            self._zkong_url("/zk/user/login"),
+            {
+                "account": self.settings.zkong_account,
+                "password": encrypted_password,
+                "loginType": 3,
+            },
+        )
+        if not login_response.get("success"):
+            raise RuntimeError(f"ZKONGログインに失敗しました: {login_response}")
+        self._zkong_login_data = login_response.get("data") or {}
+        self._zkong_token = self._zkong_login_data.get("token")
+        if not self._zkong_token:
+            raise RuntimeError(f"ZKONGログインレスポンスにtokenがありません: {login_response}")
+        return self._zkong_token
+
+    def resolve_zkong_ids(self) -> tuple[str, str, str]:
+        """ZKONG送信に必要なagencyId/merchantId/storeIdを取得する。"""
+        login_data = self._zkong_login_data or {}
+        current_user = login_data.get("currentUser") or {}
+        agency_id = self.settings.zkong_agency_id or str(current_user.get("agencyId") or "")
+        merchant_id = self.settings.zkong_merchant_id or str(current_user.get("merchantId") or "")
+        store_id = self.settings.zkong_store_id or str(current_user.get("storeId") or "")
+        missing = [
+            name
+            for name, value in [("agencyId", agency_id), ("merchantId", merchant_id), ("storeId", store_id)]
+            if not value or value == "None"
+        ]
+        if missing:
+            raise ValueError(f"ZKONG送信に必要なIDが不足しています: {', '.join(missing)}")
+        return agency_id, merchant_id, store_id
+
+    def ensure_zkong_settings(self) -> None:
+        """ZKONG接続に必要な最低限の設定を確認する。"""
+        missing = []
+        if not self.settings.zkong_base_url:
+            missing.append("ZKONG_BASE_URL")
+        if not self.settings.zkong_account:
+            missing.append("ZKONG_ACCOUNT")
+        if not self.settings.zkong_password:
+            missing.append("ZKONG_PASSWORD")
+        if missing:
+            raise ValueError(f"ZKONG設定が不足しています: {', '.join(missing)}")
+
+    def _zkong_url(self, path: str) -> str:
+        return f"{self.settings.zkong_base_url}{path}"
 
     def build_payloads(self, layout: dict[str, Any], rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """履歴保存とAPI送信で共通利用するpayload一覧を作る。"""
@@ -299,6 +556,29 @@ class ApiClient:
         except urllib.error.HTTPError as exc:
             detail = exc.read().decode("utf-8", errors="replace")[:500]
             raise RuntimeError(f"API送信に失敗しました: status={exc.code}, body={detail}") from exc
+
+    def _request_json(
+        self,
+        method: str,
+        endpoint: str,
+        payload: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
+        """JSON APIを呼び出し、レスポンスJSONをdictで返す。"""
+        request_headers = {"Content-Type": "application/json;charset=utf-8"}
+        if headers:
+            request_headers.update(headers)
+        body = None
+        if payload is not None:
+            body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        request = urllib.request.Request(endpoint, data=body, headers=request_headers, method=method)
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                response_body = response.read().decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")[:500]
+            raise RuntimeError(f"HTTP request failed: status={exc.code}, body={detail}") from exc
+        return json.loads(response_body) if response_body else {}
 
 
 class FileProcessor:
@@ -348,7 +628,12 @@ class FileProcessor:
         if not self.settings.save_history_jsonl:
             return
 
-        payloads = self.api.build_payloads(layout, rows)
+        if self.settings.api_provider == "zkong":
+            payloads = self.api.build_zkong_item_list(layout, rows)
+            api_path = "/zk/item/batchImportItem"
+        else:
+            payloads = self.api.build_payloads(layout, rows)
+            api_path = layout.get("api", {}).get("path", "")
         if self.history_path.exists():
             history = json.loads(self.history_path.read_text(encoding="utf-8-sig"))
         else:
@@ -363,7 +648,7 @@ class FileProcessor:
                 "sourceFile": file_name,
                 "layoutId": layout["id"],
                 "layoutName": layout["name"],
-                "apiPath": layout.get("api", {}).get("path", ""),
+                "apiPath": api_path,
                 "count": len(payloads),
                 "payloads": payloads,
             }
@@ -528,6 +813,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--watch", action="store_true", help="waitingフォルダを監視し続けます")
     parser.add_argument("--once", action="store_true", help="waitingフォルダ内のファイルを1回だけ処理します")
     parser.add_argument("--dry-run", action="store_true", help="APIへ送信せず、解析と検証だけ実行します")
+    parser.add_argument("--zkong-login-test", action="store_true", help="ZKONGへログインできるか確認します")
     return parser
 
 
@@ -535,6 +821,17 @@ def main() -> None:
     """コマンドライン引数を読み、単発処理または監視処理を開始する。"""
     args = build_arg_parser().parse_args()
     settings = AppSettings.from_env(dry_run=args.dry_run)
+    if args.zkong_login_test:
+        login_data = ApiClient(settings).test_zkong_login()
+        current_user = login_data.get("currentUser") or {}
+        print(
+            "[ZKONG LOGIN OK] "
+            f"userName={login_data.get('userName')}, "
+            f"agencyId={current_user.get('agencyId')}, "
+            f"merchantId={current_user.get('merchantId')}, "
+            f"storeId={current_user.get('storeId')}"
+        )
+        return
     if args.watch:
         run_watch(settings)
     else:

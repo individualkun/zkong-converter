@@ -27,7 +27,8 @@
           "target": "planCode",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature11"
         },
         {
           "index": 1,
@@ -36,7 +37,8 @@
           "target": "planName",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "promotionText"
         },
         {
           "index": 2,
@@ -45,7 +47,8 @@
           "target": "saleStartDate",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature12"
         },
         {
           "index": 3,
@@ -54,7 +57,8 @@
           "target": "saleStartTime",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature13"
         },
         {
           "index": 4,
@@ -63,7 +67,8 @@
           "target": "saleEndDate",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature14"
         },
         {
           "index": 5,
@@ -72,7 +77,8 @@
           "target": "saleEndTime",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature15"
         },
         {
           "index": 6,
@@ -81,7 +87,8 @@
           "target": "storeOrderStartDate",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature16"
         },
         {
           "index": 7,
@@ -90,7 +97,8 @@
           "target": "storeOrderEndDate",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature17"
         },
         {
           "index": 8,
@@ -99,7 +107,8 @@
           "target": "headOfficeOrderDeadline",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature18"
         },
         {
           "index": 9,
@@ -108,7 +117,8 @@
           "target": "createdAt",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature19"
         },
         {
           "index": 10,
@@ -117,7 +127,8 @@
           "target": "createdBy",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature20"
         },
         {
           "index": 11,
@@ -126,7 +137,8 @@
           "target": "updatedAt",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature21"
         },
         {
           "index": 12,
@@ -135,7 +147,8 @@
           "target": "updatedBy",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature22"
         }
       ]
     },
@@ -173,7 +186,8 @@
           "target": "subCode",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature23"
         },
         {
           "index": 2,
@@ -182,7 +196,8 @@
           "target": "subName",
           "type": "str",
           "required": true,
-          "send": true
+          "send": true,
+          "zkongTarget": "promotionText"
         },
         {
           "index": 3,
@@ -382,7 +397,8 @@
           "target": "itemCode",
           "type": "str",
           "required": true,
-          "send": false
+          "send": false,
+          "zkongTarget": "barCode"
         },
         {
           "index": 3,
@@ -400,7 +416,8 @@
           "target": "posTaxType",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature1"
         },
         {
           "index": 5,
@@ -409,7 +426,8 @@
           "target": "taxRate",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature2"
         },
         {
           "index": 6,
@@ -436,7 +454,8 @@
           "target": "taxDecimalDigits",
           "type": "int",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature3"
         },
         {
           "index": 9,
@@ -445,7 +464,8 @@
           "target": "costIncludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "originalPrice"
         },
         {
           "index": 10,
@@ -454,7 +474,8 @@
           "target": "priceIncludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "price"
         },
         {
           "index": 11,
@@ -463,7 +484,8 @@
           "target": "costExcludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature4"
         },
         {
           "index": 12,
@@ -472,7 +494,8 @@
           "target": "priceExcludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature5"
         },
         {
           "index": 13,
@@ -481,7 +504,8 @@
           "target": "taxAmount",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature6"
         },
         {
           "index": 14,
@@ -681,7 +705,8 @@
           "target": "itemCode",
           "type": "str",
           "required": true,
-          "send": false
+          "send": false,
+          "zkongTarget": "barCode"
         },
         {
           "index": 4,
@@ -699,7 +724,8 @@
           "target": "posTaxType",
           "type": "str",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature1"
         },
         {
           "index": 6,
@@ -708,7 +734,8 @@
           "target": "taxRate",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature2"
         },
         {
           "index": 7,
@@ -735,7 +762,8 @@
           "target": "taxDecimalDigits",
           "type": "int",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature3"
         },
         {
           "index": 10,
@@ -744,7 +772,8 @@
           "target": "costIncludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "originalPrice"
         },
         {
           "index": 11,
@@ -753,7 +782,8 @@
           "target": "priceIncludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "price"
         },
         {
           "index": 12,
@@ -762,7 +792,8 @@
           "target": "costExcludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature4"
         },
         {
           "index": 13,
@@ -771,7 +802,8 @@
           "target": "priceExcludingTax",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature5"
         },
         {
           "index": 14,
@@ -780,7 +812,8 @@
           "target": "taxAmount",
           "type": "float",
           "required": false,
-          "send": true
+          "send": true,
+          "zkongTarget": "custFeature6"
         },
         {
           "index": 15,

@@ -53,9 +53,18 @@ python converter.py --watch
 設定は [zkong-app/.env](./zkong-app/.env) で行います。
 
 ```env
+API_PROVIDER=generic
 API_ENDPOINT=
 API_TOKEN=
 DRY_RUN=true
+ZKONG_BASE_URL=https://esl-jp.zkong.com
+ZKONG_ACCOUNT=
+ZKONG_PASSWORD=
+ZKONG_STORE_ID=
+ZKONG_MERCHANT_ID=
+ZKONG_AGENCY_ID=
+ZKONG_ATTR_CATEGORY=default
+ZKONG_ATTR_NAME=default
 FORMAT_CONFIG=format/formats.json
 WAITING_DIR=data/waiting
 ACTIVE_DIR=data/active
@@ -74,6 +83,46 @@ MAX_HISTORY_FILES=100
 
 本番送信する場合は、`API_ENDPOINT` を設定し、`DRY_RUN=false` にします。
 
+## ZKONG API連携
+
+ZKONGへ送信する場合は、`.env` で `API_PROVIDER=zkong` にします。
+
+```env
+API_PROVIDER=zkong
+ZKONG_BASE_URL=https://esl-jp.zkong.com
+ZKONG_ACCOUNT=your_account
+ZKONG_PASSWORD=your_password
+ZKONG_STORE_ID=your_store_id
+DRY_RUN=true
+```
+
+ZKONG APIはログイン時にRSA公開鍵でパスワードを暗号化する必要があります。`converter.py` 側で次の流れを実行します。
+
+```text
+GET  /zk/user/getErpPublicKey
+POST /zk/user/login
+POST /zk/item/batchImportItem
+```
+
+ログイン確認だけ行う場合:
+
+```powershell
+python converter.py --zkong-login-test
+```
+
+商品一括取込APIでは、次の項目を使います。
+
+- `agencyId`: `.env` の `ZKONG_AGENCY_ID`。空ならログインレスポンスから取得
+- `merchantId`: `.env` の `ZKONG_MERCHANT_ID`。空ならログインレスポンスから取得
+- `storeId`: `.env` の `ZKONG_STORE_ID`
+- `attrCategory`: `.env` の `ZKONG_ATTR_CATEGORY`
+- `attrName`: `.env` の `ZKONG_ATTR_NAME`
+- `barCode`: `formats.json` の `zkongTarget: "barCode"`、またはCSVの `itemCode`
+- `productCode`: `barCode` と同じ値。`zkongTarget: "productCode"` があれば上書き
+- `price`, `originalPrice`, `custFeature1` など: `formats.json` の `zkongTarget` に従って設定
+
+本番送信する場合は、ログイン確認が通ったあとに `DRY_RUN=false` にします。
+
 ## formats.json の役割
 
 [formats.json](./zkong-app/format/formats.json) は、CSVごとの読み取りルールとAPI送信用項目を定義するファイルです。
@@ -86,6 +135,7 @@ MAX_HISTORY_FILES=100
 - 文字列、整数、小数の型変換
 - APIへ送る項目、送らない項目の切り替え
 - API送信用の項目名変更
+- ZKONG商品登録画面/APIのどの項目へ入れるかの指定
 
 ## formats.json の全体構造
 
@@ -137,6 +187,7 @@ MAX_HISTORY_FILES=100
   "name": "planCode",
   "label": "企画特売コード",
   "target": "planCode",
+  "zkongTarget": "custFeature11",
   "type": "str",
   "required": true,
   "send": true
@@ -149,9 +200,38 @@ MAX_HISTORY_FILES=100
 | `name` | Python内部で使う英字の項目名 |
 | `label` | 元データ上の日本語項目名。人が読むための説明 |
 | `target` | APIへ送るJSONのキー名 |
+| `zkongTarget` | `API_PROVIDER=zkong` の時に入れるZKONG商品項目名。未指定なら `target` がZKONG項目名の場合だけ使う |
 | `type` | 型。`str`, `int`, `float` のいずれか |
 | `required` | `true` の場合、空ならエラー |
 | `send` | `true` の場合、API送信payloadに含める |
+
+ZKONG向けに指定できる主な `zkongTarget` は次の通りです。
+
+| ZKONG項目 | 画面上の意味 |
+| --- | --- |
+| `barCode` | 品物バーコード。必須。未指定時は `itemCode` を使う |
+| `productCode` | 品物コード |
+| `itemTitle` | 品物名称 |
+| `shortTitle` | 商品名称 |
+| `unit` | 販売単位 |
+| `manufacturer` | メーカー名 |
+| `productArea` | 産地 |
+| `itemGrade` | 品物等級 |
+| `qrCode` | QRコードリンク |
+| `nfcUrl` | NFC URL |
+| `weighingType` | 計量タイプ |
+| `releaseStatus` | 発売状態 |
+| `firstCategory` | 一級分類 |
+| `secondCategory` | 二次分類 |
+| `labelNo` | ラベル番号 |
+| `spec` | 規格 |
+| `originalPrice` | 定価 |
+| `price` | プロモーション価格、または売価 |
+| `memberPrice` | 会員価格 |
+| `stock1`, `stock2`, `stock3` | 在庫数1から3 |
+| `proStartTime`, `proEndTime` | 時間1、時間2 |
+| `promotionText` | コピーライティング |
+| `custFeature1` から `custFeature50` | 拡張フィールド内容 |
 
 ## 必要なデータだけ抜く方法
 
